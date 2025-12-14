@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans antialiased bg-gray-50 text-slate-800;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight font-bold text-slate-900;
+  }
+
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  /* Glassmorphism utility */
+  .glass {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-sm;
+  }
+  
+  .btn-primary {
+    @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all active:scale-95 shadow-lg shadow-blue-500/20 font-medium;
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-slate-700 border border-slate-200 px-4 py-2 rounded-lg hover:bg-slate-50 transition-all active:scale-95 font-medium;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-md;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent; 
+  }
+   
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1; 
+    border-radius: 4px;
+    border: 2px solid #f8fafc;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8; 
+  }
+}
+
+/* Typography polish for rich text content */
+.prose {
+    @apply text-slate-700;
+}
+.prose h1, .prose h2 {
+    @apply text-slate-900 font-bold mb-4 mt-8;
+}
+.prose p {
+    @apply mb-4 leading-relaxed;
+}
+.prose a {
+    @apply text-blue-600 underline decoration-blue-300 underline-offset-2 hover:decoration-blue-600 transition-colors;
+}
+.prose pre {
+    @apply bg-slate-900 text-slate-50 rounded-lg p-6 my-6 overflow-x-auto;
+}
+.prose code {
+    @apply text-pink-600 bg-pink-50 px-1 py-0.5 rounded text-sm font-medium;
+}
+.prose pre code {
+    @apply bg-transparent text-inherit p-0;
+}
+.prose ul {
+    @apply list-disc list-outside ml-6 mb-4;
+}
+.prose ol {
+    @apply list-decimal list-outside ml-6 mb-4;
+}
+.prose blockquote {
+    @apply border-l-4 border-blue-500 pl-4 italic text-slate-600 my-6;
+}
