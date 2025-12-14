@@ -2,6 +2,29 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 
+router.get('/suggestions', async (req, res) => {
+    try {
+        const { q } = req.query;
+        if (!q || q.trim().length === 0) {
+            return res.json([]);
+        }
+        
+        // Simple partial match on title for autocomplete
+        const result = await pool.query(
+            `SELECT id, title 
+             FROM articles 
+             WHERE status = 'published' 
+             AND title ILIKE $1 
+             LIMIT 5`,
+            [`%${q}%`]
+        );
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Suggestion error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 router.get('/', async (req, res) => {
     try {
         const { q } = req.query;

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { MessageSquare, Trash2, Send } from 'lucide-react';
 import api from '../api';
+import { Button } from '@/components/ui/button';
 
 export default function CommentSection({ articleId, user }) {
     const [comments, setComments] = useState([]);
@@ -53,50 +55,58 @@ export default function CommentSection({ articleId, user }) {
     };
 
     return (
-        <div className="mt-12 border-t pt-8">
-            <h3 className="text-2xl font-bold mb-6">💬 Comments ({comments.length})</h3>
+        <div className="mt-8">
+            <h3 className="text-2xl font-black text-black mb-6 flex items-center gap-2 uppercase tracking-tight">
+                <MessageSquare className="w-6 h-6" />
+                Comments ({comments.length})
+            </h3>
             
             {/* Comment Form */}
             {user ? (
-                <form onSubmit={handleSubmit} className="mb-8">
+                <form onSubmit={handleSubmit} className="mb-8 p-6 bg-yellow-50 border-2 border-black rounded-xl">
                     <textarea
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="What are your thoughts?"
-                        className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[100px]"
+                        className="w-full p-4 border-2 border-black rounded-lg focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] min-h-[100px] outline-none transition-all font-medium placeholder:text-gray-500 bg-white"
                         required
                     />
-                    <div className="mt-2 flex justify-end">
-                        <button
+                    <div className="mt-4 flex justify-end">
+                        <Button
                             type="submit"
                             disabled={loading || !newComment.trim()}
-                            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                            className="bg-black text-white px-6 py-2 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_bg-black]"
                         >
                             {loading ? 'Posting...' : 'Post Comment'}
-                        </button>
+                        </Button>
                     </div>
                 </form>
             ) : (
-                <div className="bg-gray-50 p-4 rounded-lg mb-8 text-center text-gray-600">
-                    <a href="/login" className="text-blue-600 font-medium hover:underline">Log in</a> to leave a comment.
+                <div className="bg-gray-100 border-2 border-dashed border-gray-300 p-8 rounded-xl mb-8 text-center">
+                    <p className="text-gray-600 font-bold mb-4">Join the conversation</p>
+                    <a href="/login" className="inline-block bg-black text-white font-bold py-2 px-6 rounded-lg border-2 border-transparent hover:bg-white hover:text-black hover:border-black transition-all">
+                        Log in to comment
+                    </a>
                 </div>
             )}
 
             {/* Comments List */}
             <div className="space-y-6">
                 {comments.length === 0 ? (
-                    <p className="text-gray-500 text-center py-4">No comments yet. Be the first!</p>
+                    <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-xl">
+                        <p className="font-bold text-gray-400">No comments yet. Be the first!</p>
+                    </div>
                 ) : (
                     comments.map(comment => (
-                        <div key={comment.id} className="bg-gray-50 p-4 rounded-lg">
-                            <div className="flex justify-between items-start mb-2">
-                                <div className="flex items-center gap-2">
-                                    <div className="bg-blue-100 text-blue-800 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
-                                        {comment.username.charAt(0).toUpperCase()}
+                        <div key={comment.id} className="bg-white p-6 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                            <div className="flex justify-between items-start mb-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-black text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 border-transparent">
+                                        {comment.username?.charAt(0).toUpperCase() || '?'}
                                     </div>
                                     <div>
-                                        <span className="font-semibold block text-sm">{comment.username}</span>
-                                        <span className="text-xs text-gray-500">
+                                        <span className="font-black text-black block">{comment.username || 'Unknown User'}</span>
+                                        <span className="text-xs font-bold text-gray-500">
                                             {new Date(comment.created_at).toLocaleDateString()}
                                         </span>
                                     </div>
@@ -104,14 +114,14 @@ export default function CommentSection({ articleId, user }) {
                                 {(user?.role === 'admin' || user?.id === comment.user_id) && (
                                     <button
                                         onClick={() => handleDelete(comment.id)}
-                                        className="text-gray-400 hover:text-red-500"
+                                        className="text-gray-400 hover:text-red-600 p-2 hover:bg-red-50 rounded-lg transition-colors"
                                         title="Delete comment"
                                     >
-                                        ✕
+                                        <Trash2 className="w-4 h-4" />
                                     </button>
                                 )}
                             </div>
-                            <p className="text-gray-700 text-sm whitespace-pre-wrap pl-10">{comment.body}</p>
+                            <p className="text-gray-800 font-medium whitespace-pre-wrap pl-1">{comment.body}</p>
                         </div>
                     ))
                 )}

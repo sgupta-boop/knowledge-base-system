@@ -99,25 +99,25 @@ export default function ArticleEditor() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Header Controls */}
-                <div className="flex items-center justify-between mb-8 sticky top-20 bg-gray-50 z-10 py-4 border-b border-transparent hover:border-gray-200 transition-colors">
-                    <div className="flex items-center space-x-2 text-sm text-gray-500">
-                        <span>{isEditMode ? 'Editing' : 'Drafting'} in</span>
+                <div className="flex items-center justify-between mb-8 sticky top-20 bg-white z-10 py-4 border-2 border-black px-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl transition-colors">
+                    <div className="flex items-center space-x-2 text-sm text-black font-bold">
+                        <span className="uppercase tracking-tight">{isEditMode ? 'Editing' : 'Drafting'} in</span>
                         <select
                             value={formData.category_id}
                             onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-                            className="bg-transparent hover:bg-gray-200 rounded px-2 py-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                            className="bg-yellow-100 border-2 border-black rounded px-2 py-1 cursor-pointer focus:outline-none focus:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all uppercase text-xs"
                         >
                             <option value="">Select Category</option>
                             {categories.map(cat => (
                                 <option key={cat.id} value={cat.id}>{cat.name}</option>
                             ))}
                         </select>
-                        <span className="text-gray-300">|</span>
+                        <span className="text-black mx-2">|</span>
                         <select
                              value={formData.status}
                              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                             className={`bg-transparent hover:bg-gray-200 rounded px-2 py-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                 formData.status === 'published' ? 'text-green-600 font-medium' : 'text-gray-500'
+                             className={`border-2 border-black rounded px-2 py-1 cursor-pointer focus:outline-none focus:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all uppercase text-xs font-bold ${
+                                 formData.status === 'published' ? 'bg-green-300 text-black' : 'bg-gray-200 text-gray-500'
                              }`}
                         >
                             <option value="draft">Draft</option>
@@ -129,16 +129,16 @@ export default function ArticleEditor() {
                          <button
                             type="button"
                             onClick={() => navigate('/')}
-                            className="text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded text-sm transition-colors"
+                            className="text-black font-bold hover:underline px-3 py-1.5 text-sm transition-colors uppercase"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={loading}
-                            className="bg-blue-600 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-blue-700 disabled:opacity-50 shadow-sm transition-all"
+                            className="bg-black text-white px-4 py-2 rounded-lg border-2 border-transparent text-sm font-bold hover:bg-white hover:text-black hover:border-black hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 transition-all uppercase"
                         >
-                            {loading ? 'Saving...' : 'Save'}
+                            {loading ? 'Saving...' : 'Save Article'}
                         </button>
                     </div>
                 </div>

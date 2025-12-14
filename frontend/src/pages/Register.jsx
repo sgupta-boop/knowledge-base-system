@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import toast from 'react-hot-toast';
 import api from '../api';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { CheckCircle2Icon, AlertCircleIcon } from 'lucide-react';
+import ProfilePreview from '@/components/ProfilePreview';
 
 export default function Register({ setUser }) {
     const [formData, setFormData] = useState({
@@ -11,11 +14,15 @@ export default function Register({ setUser }) {
         role: 'reader' // Default role
     });
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setError('');
+        
         try {
             const response = await api.post('/auth/register', formData);
             const { token, user } = response.data;
@@ -24,95 +31,134 @@ export default function Register({ setUser }) {
             localStorage.setItem('user', JSON.stringify(user));
             setUser(user);
             
-            toast.success('Account created successfully!');
-            navigate('/');
-        } catch (error) {
-            toast.error(error.response?.data?.error || 'Registration failed');
+            setSuccess(true);
+            
+            // Delay navigation slightly to show success alert
+            setTimeout(() => {
+                navigate('/');
+            }, 2000);
+        } catch (err) {
+            setError(err.response?.data?.error || 'Registration failed');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4">
-             <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl"></div>
-            </div>
-
-            <div className="w-full max-w-md glass p-8 rounded-2xl">
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-2">
-                        Create Account
-                    </h1>
-                     <p className="text-gray-500">Join the Knowledge Base community</p>
-                </div>
-
-                <form onSubmit={handleSubmit} className="space-y-5">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                        <input
-                            type="text"
-                            value={formData.username}
-                            onChange={(e) => setFormData({...formData, username: e.target.value})}
-                            className="w-full px-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none"
-                            placeholder="Choose a username"
-                            required
-                        />
+        <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4 bg-yellow-50">
+            <div className="w-full max-w-4xl grid md:grid-cols-2 gap-8 items-start">
+                
+                {/* Left Side: Form */}
+                <div className="bg-white border-2 border-black rounded-xl p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                    <div className="mb-8">
+                        <h1 className="text-4xl font-black text-black mb-2 uppercase tracking-tight">
+                            Join Us
+                        </h1>
+                        <p className="font-bold text-gray-500">Create your knowledge base account</p>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                        <input
-                            type="email"
-                            value={formData.email}
-                            onChange={(e) => setFormData({...formData, email: e.target.value})}
-                            className="w-full px-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none"
-                            placeholder="name@example.com"
-                            required
-                        />
-                    </div>
+                    {success && (
+                        <div className="mb-6">
+                            <Alert variant="success" className="bg-green-200">
+                                <CheckCircle2Icon className="h-4 w-4" />
+                                <AlertTitle>Success!</AlertTitle>
+                                <AlertDescription>
+                                    Your account has been created. Redirecting...
+                                </AlertDescription>
+                            </Alert>
+                        </div>
+                    )}
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                        <input
-                            type="password"
-                            value={formData.password}
-                            onChange={(e) => setFormData({...formData, password: e.target.value})}
-                            className="w-full px-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none"
-                            placeholder="Min. 6 characters"
-                            required
-                        />
-                    </div>
+                    {error && (
+                        <div className="mb-6">
+                            <Alert variant="destructive">
+                                <AlertCircleIcon className="h-4 w-4" />
+                                <AlertTitle>Error</AlertTitle>
+                                <AlertDescription>
+                                    {error}
+                                </AlertDescription>
+                            </Alert>
+                        </div>
+                    )}
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
-                        <select
-                            value={formData.role}
-                            onChange={(e) => setFormData({...formData, role: e.target.value})}
-                            className="w-full px-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none"
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-black uppercase">Username</label>
+                            <input
+                                type="text"
+                                value={formData.username}
+                                onChange={(e) => setFormData({...formData, username: e.target.value})}
+                                className="w-full px-4 py-3 bg-white border-2 border-black rounded-lg focus:ring-0 focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all outline-none font-medium placeholder:text-gray-400"
+                                placeholder="Choose a username"
+                                required
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-black uppercase">Email</label>
+                            <input
+                                type="email"
+                                value={formData.email}
+                                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                className="w-full px-4 py-3 bg-white border-2 border-black rounded-lg focus:ring-0 focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all outline-none font-medium placeholder:text-gray-400"
+                                placeholder="name@example.com"
+                                required
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-black uppercase">Password</label>
+                            <input
+                                type="password"
+                                value={formData.password}
+                                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                                className="w-full px-4 py-3 bg-white border-2 border-black rounded-lg focus:ring-0 focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all outline-none font-medium placeholder:text-gray-400"
+                                placeholder="Super secret password"
+                                required
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-black uppercase">Role</label>
+                            <select
+                                value={formData.role}
+                                onChange={(e) => setFormData({...formData, role: e.target.value})}
+                                className="w-full px-4 py-3 bg-white border-2 border-black rounded-lg focus:ring-0 focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all outline-none font-medium cursor-pointer"
+                            >
+                                <option value="reader">Reader</option>
+                                <option value="editor">Editor</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+
+                        <Button 
+                            type="submit" 
+                            disabled={loading || success}
+                            className="w-full text-base py-6 mt-4"
                         >
-                            <option value="reader">Reader</option>
-                            <option value="editor">Editor</option>
-                             <option value="admin">Admin</option>
-                        </select>
+                            {loading ? 'Creating...' : 'Sign Up Now'}
+                        </Button>
+                    </form>
+
+                    <div className="mt-8 text-center text-sm font-bold">
+                        Already a member?{' '}
+                        <Link to="/login" className="text-blue-600 hover:text-blue-800 underline decoration-2 underline-offset-4">
+                            Log In
+                        </Link>
                     </div>
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-xl font-medium shadow-lg shadow-purple-500/30 hover:shadow-purple-500/40 transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {loading ? 'Creating Account...' : 'Sign Up'}
-                    </button>
-                </form>
-
-                <div className="mt-8 text-center text-sm text-gray-500">
-                    Already have an account?{' '}
-                    <Link to="/login" className="text-purple-600 font-semibold hover:text-purple-700">
-                        Sign In
-                    </Link>
                 </div>
+
+                {/* Right Side: Preview */}
+                <div className="hidden md:block sticky top-24">
+                    <div className="mb-4">
+                        <h3 className="text-xl font-black text-black uppercase mb-1">Live Badge Preview</h3>
+                        <p className="text-sm text-gray-600 font-medium">This is how you'll appear to others</p>
+                    </div>
+                    <ProfilePreview username={formData.username} role={formData.role} />
+                    
+
+                </div>
+
             </div>
         </div>
     );

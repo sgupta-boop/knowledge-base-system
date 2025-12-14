@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { Search, FileText, Eye, User, Calendar, Tag } from 'lucide-react';
 import api from '../api';
 
 export default function ArticleList() {
@@ -47,21 +48,33 @@ export default function ArticleList() {
         }
     };
 
+    // Highlight helper
+    const highlightText = (text, query) => {
+        if (!query) return text;
+        const parts = text.split(new RegExp(`(${query})`, 'gi'));
+        return parts.map((part, i) => 
+            part.toLowerCase() === query.toLowerCase() ? (
+                <span key={i} className="bg-yellow-300">{part}</span>
+            ) : (
+                part
+            )
+        );
+    };
+
     useEffect(() => {
         fetchCategories();
         fetchArticles();
     }, []);
 
-    // Helper to get random soft colors for category tags
+    // Helper to get random soft colors for category tags (slightly bolder now)
     const getCategoryColor = (name) => {
         const colors = [
-            'bg-blue-100 text-blue-700',
-            'bg-purple-100 text-purple-700',
-            'bg-green-100 text-green-700', 
-            'bg-indigo-100 text-indigo-700',
-            'bg-pink-100 text-pink-700'
+            'bg-blue-200 text-black',
+            'bg-purple-200 text-black',
+            'bg-green-200 text-black', 
+            'bg-yellow-200 text-black',
+            'bg-pink-200 text-black'
         ];
-        // Simple hash to persist color per category name
         let hash = 0;
         for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
         return colors[Math.abs(hash) % colors.length];
@@ -70,7 +83,7 @@ export default function ArticleList() {
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-black border-t-transparent"></div>
             </div>
         );
     }
@@ -80,10 +93,10 @@ export default function ArticleList() {
             {/* Header Section */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
-                    <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
+                    <h1 className="text-4xl font-black text-black uppercase tracking-tighter mb-2">
                         Explore Knowledge
                     </h1>
-                    <p className="text-lg text-slate-500">
+                    <p className="text-lg font-bold text-gray-500">
                         Discover articles, tutorials, and guides.
                     </p>
                 </div>
@@ -95,11 +108,11 @@ export default function ArticleList() {
                             type="text"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search..."
-                            className="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-full focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none shadow-sm group-hover:shadow-md"
+                            placeholder="SEARCH..."
+                            className="w-full sm:w-64 pl-10 pr-4 py-3 bg-white border-2 border-black rounded-lg focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all outline-none font-bold placeholder:text-gray-400"
                         />
-                         <span className="absolute left-3.5 top-2.5 text-gray-400 group-focus-within:text-blue-500">
-                            🔍
+                         <span className="absolute left-3.5 top-3.5 text-black">
+                            <Search className="w-5 h-5" />
                         </span>
                         {searchResults && (
                             <button
@@ -108,7 +121,7 @@ export default function ArticleList() {
                                     setSearchQuery('');
                                     setSearchResults(null);
                                 }}
-                                className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 text-xs bg-gray-100 px-1.5 py-0.5 rounded-full"
+                                className="absolute right-3 top-3 text-xs font-bold bg-black text-white px-2 py-1 rounded"
                             >
                                 ESC
                             </button>
@@ -118,7 +131,7 @@ export default function ArticleList() {
                     <select
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="px-4 py-2.5 bg-white border border-gray-200 rounded-full focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none cursor-pointer shadow-sm hover:shadow-md transition-all text-sm font-medium text-slate-700"
+                        className="px-4 py-3 bg-white border-2 border-black rounded-lg focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] outline-none cursor-pointer transition-all font-bold text-black uppercase"
                     >
                         <option value="">All Categories</option>
                         {categories.map(cat => (
@@ -131,61 +144,61 @@ export default function ArticleList() {
             {/* Results Info */}
             {searchResults && (
                 <div className="mb-6 px-1">
-                    <span className="text-slate-500 font-medium">
-                        Found {searchResults.length} results for 
+                    <span className="font-bold text-black border-2 border-black bg-yellow-300 px-3 py-1 rounded-md shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                        Found {searchResults.length} results for "{searchQuery}"
                     </span>
-                    <span className="ml-2 font-bold text-slate-900">"{searchQuery}"</span>
                 </div>
             )}
             
             {/* Articles Grid */}
             {displayArticles.length === 0 ? (
-                <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200">
-                    <div className="text-6xl mb-4">📝</div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">No articles found</h3>
-                    <p className="text-gray-500 max-w-sm mx-auto">
+                <div className="text-center py-24 bg-white rounded-xl border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                    <div className="inline-block p-4 rounded-full bg-gray-100 border-2 border-black mb-4">
+                        <FileText className="w-8 h-8 text-black" />
+                    </div>
+                    <h3 className="text-2xl font-black text-black uppercase mb-2">No articles found</h3>
+                    <p className="font-bold text-gray-500 max-w-sm mx-auto">
                         Try adjusting your search terms or filter. Or be the first to write one!
                     </p>
                 </div>
             ) : (
                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                    {displayArticles.map((article, index) => (
+                    {displayArticles.map((article) => (
                         <Link
                             key={article.id}
                             to={`/articles/${article.id}`}
-                            className="group flex flex-col bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                            style={{ animationDelay: `${index * 50}ms` }}
+                            className="group flex flex-col bg-white rounded-xl border-2 border-black overflow-hidden hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                         >
-                            <div className="h-3 bg-gradient-to-r from-blue-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            
                             <div className="p-6 flex-1 flex flex-col">
                                 <div className="flex items-center justify-between mb-4">
-                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getCategoryColor(article.category_name || '')}`}>
+                                    <span className={`px-2 py-1 rounded border-2 border-black text-xs font-black uppercase tracking-wider ${getCategoryColor(article.category_name || '')}`}>
                                         {article.category_name || 'General'}
                                     </span>
-                                    <span className="text-xs font-medium text-gray-400 flex items-center gap-1">
-                                        👁️ {article.view_count || 0}
+                                    <span className="text-xs font-bold text-gray-600 flex items-center gap-1 bg-gray-100 px-2 py-1 rounded border border-black">
+                                        <Eye className="w-3 h-3" />
+                                        {article.view_count || 0}
                                     </span>
                                 </div>
                                 
-                                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
-                                    {article.title}
+                                <h3 className="text-xl font-black text-black mb-3 group-hover:underline decoration-2 underline-offset-2 line-clamp-2">
+                                    {searchResults ? highlightText(article.title, searchQuery) : article.title}
                                 </h3>
                                 
-                                <p className="text-gray-500 text-sm mb-6 line-clamp-3 leading-relaxed">
+                                <p className="text-gray-600 text-sm mb-6 line-clamp-3 leading-relaxed font-medium border-l-4 border-gray-200 pl-3">
                                     {article.body.replace(/[#*`]/g, '').substring(0, 150)}...
                                 </p>
                                 
-                                <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+                                <div className="mt-auto pt-4 border-t-2 border-black flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                        <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">
+                                        <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-xs font-bold text-white border-2 border-transparent group-hover:border-yellow-300 transition-colors">
                                             {article.author_name?.charAt(0).toUpperCase()}
                                         </div>
-                                        <span className="text-xs font-medium text-gray-600 truncate max-w-[100px]">
+                                        <span className="text-xs font-bold text-black truncate max-w-[100px]">
                                             {article.author_name}
                                         </span>
                                     </div>
-                                    <span className="text-xs text-gray-400">
+                                    <span className="text-xs font-bold text-gray-400 flex items-center gap-1">
+                                        <Calendar className="w-3 h-3" />
                                         {new Date(article.created_at).toLocaleDateString()}
                                     </span>
                                 </div>

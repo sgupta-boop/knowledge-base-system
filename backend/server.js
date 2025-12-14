@@ -1,17 +1,23 @@
 // Import required packages
 const express = require('express');
 const cors = require('cors');
+const path = require('path'); // Added path for static files
 require('dotenv').config();
 
 // Import database connection
 const pool = require('./config/db');
 
-// Import routes (we'll create these next)
+// Import middleware
+const trackActivity = require('./middleware/activity'); // Added activity tracking middleware
+
+// Import routes
 const authRoutes = require('./routes/auth');
 const articleRoutes = require('./routes/articles');
 const categoryRoutes = require('./routes/categories');
+const uploadRoutes = require('./routes/upload'); // Added upload routes
 const searchRoutes = require('./routes/search');
 const commentRoutes = require('./routes/comments');
+const statsRoutes = require('./routes/stats'); // Added stats routes
 
 // Initialize Express app
 const app = express();

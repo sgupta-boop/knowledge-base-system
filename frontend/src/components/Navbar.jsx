@@ -1,5 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { BookOpen, PenTool, Settings, LogOut } from 'lucide-react';
+import SearchAutocomplete from './SearchAutocomplete';
 
 export default function Navbar({ user, setUser }) {
     const navigate = useNavigate();
@@ -13,71 +15,78 @@ export default function Navbar({ user, setUser }) {
     };
     
     return (
-        <nav className="fixed top-0 w-full z-50 glass">
+        <nav className="fixed top-0 w-full z-50 bg-white border-b-2 border-black">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16">
-                    <div className="flex items-center">
-                        <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent transform hover:scale-105 transition-transform duration-200">
-                            📚 Knowledge Base
+                <div className="flex justify-between h-20">
+                    <div className="flex items-center gap-8 flex-1">
+                        <Link to="/" className="text-2xl font-black text-black uppercase tracking-tighter hover:underline decoration-4 underline-offset-4 shrink-0">
+                            Knowledge Base
                         </Link>
                         
-                        <div className="hidden md:flex ml-10 space-x-1">
+                        {/* Search Bar - Visible on desktop */}
+                        <div className="hidden md:block w-full max-w-xs">
+                            <SearchAutocomplete />
+                        </div>
+                        
+                        <div className="hidden md:flex ml-12 space-x-2">
                             <Link 
                                 to="/" 
-                                className="text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-full text-sm font-medium transition-all"
+                                className="flex items-center gap-2 text-black hover:bg-black hover:text-white px-4 py-2 rounded-lg text-sm font-bold border-2 border-transparent hover:border-black transition-all"
                             >
+                                <BookOpen className="w-4 h-4" />
                                 Articles
                             </Link>
                             
                             {(user.role === 'editor' || user.role === 'admin') && (
                                 <Link 
                                     to="/editor" 
-                                    className="text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-full text-sm font-medium transition-all"
+                                    className="flex items-center gap-2 text-black hover:bg-black hover:text-white px-4 py-2 rounded-lg text-sm font-bold border-2 border-transparent hover:border-black transition-all"
                                 >
-                                    ✏️ Write
+                                    <PenTool className="w-4 h-4" />
+                                    Write
                                 </Link>
                             )}
                             
                             {user.role === 'admin' && (
                                 <Link 
                                     to="/admin" 
-                                    className="text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-full text-sm font-medium transition-all"
+                                    className="flex items-center gap-2 text-black hover:bg-black hover:text-white px-4 py-2 rounded-lg text-sm font-bold border-2 border-transparent hover:border-black transition-all"
                                 >
-                                    ⚙️ Admin
+                                    <Settings className="w-4 h-4" />
+                                    Admin
                                 </Link>
                             )}
                         </div>
                     </div>
                     
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center gap-6">
+
+                        <div className="flex items-center gap-3 border-l-2 border-gray-100 pl-6">
                         <div className="flex items-center gap-3">
                             <div className="text-right hidden sm:block">
-                                <span className="block text-sm font-medium text-slate-700 leading-tight">
+                                <span className="block text-sm font-bold text-black leading-tight">
                                     {user.username}
                                 </span>
-                                <span className="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700 rounded-full">
+                                <span className="inline-block px-2 py-0.5 text-[10px] font-black uppercase tracking-wider bg-yellow-300 border border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                                     {user.role}
                                 </span>
                             </div>
-                            <div className="h-9 w-9 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">
+                            <div className="h-10 w-10 bg-black rounded-full flex items-center justify-center text-white font-bold border-2 border-black">
                                 {user.username.charAt(0).toUpperCase()}
                             </div>
                         </div>
                         
-                        <div className="h-6 w-px bg-slate-200 mx-2"></div>
-                        
                         <button
                             onClick={handleLogout}
-                            className="text-slate-500 hover:text-red-600 p-2 rounded-full hover:bg-red-50 transition-colors"
+                            className="text-black hover:bg-red-500 hover:text-white p-2 rounded-lg border-2 border-transparent hover:border-black transition-all"
                             title="Logout"
                         >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                            </svg>
+                            <LogOut className="w-5 h-5" />
                         </button>
                     </div>
                 </div>
             </div>
-        </nav>
+        </div>
+    </nav>
     );
 }

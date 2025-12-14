@@ -1,17 +1,21 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import toast from 'react-hot-toast';
 import api from '../api';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { AlertCircleIcon, LogInIcon } from 'lucide-react';
 
 export default function Login({ setUser }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setError('');
         try {
             const response = await api.post('/auth/login', { username, password });
             const { token, user } = response.data;
@@ -20,69 +24,92 @@ export default function Login({ setUser }) {
             localStorage.setItem('user', JSON.stringify(user));
             setUser(user);
             
-            toast.success('Welcome back!');
             navigate('/');
         } catch {
-            toast.error('Invalid credentials');
+            setError('Invalid credentials');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4">
-            <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-400/20 rounded-full blur-3xl"></div>
-            </div>
+        <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4 bg-yellow-50">
+            <div className="w-full max-w-4xl grid md:grid-cols-2 gap-8 items-center">
+                
+                {/* Left Side: Form */}
+                <div className="bg-white border-2 border-black rounded-xl p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                    <div className="mb-8">
+                        <h1 className="text-4xl font-black text-black mb-2 uppercase tracking-tight">
+                            Welcome Back
+                        </h1>
+                        <p className="font-bold text-gray-500">Sign in to your account</p>
+                    </div>
 
-            <div className="w-full max-w-md glass p-8 rounded-2xl">
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-                        Welcome Back
-                    </h1>
-                    <p className="text-gray-500">Sign in to continue to your Knowledge Base</p>
+                    {error && (
+                        <div className="mb-6">
+                            <Alert variant="destructive">
+                                <AlertCircleIcon className="h-4 w-4" />
+                                <AlertTitle>Error</AlertTitle>
+                                <AlertDescription>{error}</AlertDescription>
+                            </Alert>
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-black uppercase">Username</label>
+                            <input
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                className="w-full px-4 py-3 bg-white border-2 border-black rounded-lg focus:ring-0 focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all outline-none font-medium placeholder:text-gray-400"
+                                placeholder="Enter your username"
+                                required
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-black uppercase">Password</label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full px-4 py-3 bg-white border-2 border-black rounded-lg focus:ring-0 focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all outline-none font-medium placeholder:text-gray-400"
+                                placeholder="••••••••"
+                                required
+                            />
+                        </div>
+
+                        <Button 
+                            type="submit" 
+                            disabled={loading}
+                            className="w-full text-base py-6 mt-4"
+                        >
+                            {loading ? 'Signing in...' : 'Sign In'}
+                        </Button>
+                    </form>
+
+                    <div className="mt-8 text-center text-sm font-bold">
+                        Don't have an account?{' '}
+                        <Link to="/register" className="text-blue-600 hover:text-blue-800 underline decoration-2 underline-offset-4">
+                            Create Account
+                        </Link>
+                    </div>
                 </div>
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                        <input
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            className="w-full px-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                            placeholder="Enter your username"
-                            required
-                        />
+                
+                {/* Right Side: Decorative */}
+                <div className="hidden md:block">
+                    <div className="bg-blue-100 border-2 border-black rounded-xl p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                         <div className="w-16 h-16 bg-white border-2 border-black rounded-full flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                            <LogInIcon className="h-8 w-8 text-black" />
+                        </div>
+                        <h2 className="text-3xl font-black text-black mb-4 uppercase">
+                            Knowledge awaits
+                        </h2>
+                        <p className="text-lg font-medium text-gray-800 leading-relaxed">
+                            Access your articles, manage your content, and explore the knowledge base.
+                        </p>
                     </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                            placeholder="••••••••"
-                            required
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl font-medium shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {loading ? 'Signing in...' : 'Sign In'}
-                    </button>
-                </form>
-
-                <div className="mt-8 text-center text-sm text-gray-500">
-                    Don't have an account?{' '}
-                    <Link to="/register" className="text-blue-600 font-semibold hover:text-blue-700">
-                        Create Account
-                    </Link>
                 </div>
             </div>
         </div>

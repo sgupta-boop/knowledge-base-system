@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-// Create axios instance with base configuration
 const api = axios.create({
-    baseURL: 'http://localhost:5000/api',
+    baseURL: import.meta.env.PROD 
+        ? 'https://knowledge-base-system.onrender.com'  // ← PASTE YOUR RENDER URL HERE
+        : 'http://localhost:5000/api',
     headers: {
         'Content-Type': 'application/json'
     }
 });
-
 // Add token to every request if it exists
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
