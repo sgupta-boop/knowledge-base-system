@@ -151,6 +151,3 @@ knowledge-base/
 
 [Add screenshots here after deployment]
 
-## License
-
-MIT
