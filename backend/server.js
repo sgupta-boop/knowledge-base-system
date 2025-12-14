@@ -29,9 +29,10 @@ const app = express();
 
 // 1. CORS - allows frontend (localhost:5173) to call backend (localhost:5000)
 app.use(cors({
-    origin: 'http://localhost:5173',  // Vite dev server
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
     credentials: true
 }));
+
 
 // 2. JSON parser - converts request body to JavaScript object
 app.use(express.json());
