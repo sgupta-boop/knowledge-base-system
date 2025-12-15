@@ -1,4 +1,4 @@
-# Knowledge Base System
+<img width="1917" height="902" alt="Screenshot 2025-12-15 192513" src="https://github.com/user-attachments/assets/1e0fadb2-7807-483f-bbb8-72b13009bdb4" /># Knowledge Base System
 
 A full-stack documentation and knowledge management system built with the MERN stack (PostgreSQL variant).
 
@@ -70,10 +70,11 @@ CREATE DATABASE knowledge_base;
     ```
 
 The application will be available at `http://localhost:5173`.
+## DEMO
 
-##Screenshots
-###Registeration page
-<img width="1918" height="909" alt="image" src="https://github.com/user-attachments/assets/771bdd50-27f7-434b-a60e-e35771e9e3d6" />
+
+https://github.com/user-attachments/assets/d1b45a92-364e-4b37-a1dd-f9cce88ab5f4
+
 
 ## API Documentation
 
