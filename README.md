@@ -1,4 +1,6 @@
 A full-stack documentation and knowledge management system built with the MERN stack (PostgreSQL variant).
+⚠️ Demo Note:
+Due to deployment limitations, please watch the demo video for a full walkthrough of features including authentication, role-based access, article creation, and database interactions.
 
 ## Features
 
