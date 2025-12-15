@@ -1,5 +1,3 @@
-<img width="1917" height="902" alt="Screenshot 2025-12-15 192513" src="https://github.com/user-attachments/assets/1e0fadb2-7807-483f-bbb8-72b13009bdb4" /># Knowledge Base System
-
 A full-stack documentation and knowledge management system built with the MERN stack (PostgreSQL variant).
 
 ## Features
