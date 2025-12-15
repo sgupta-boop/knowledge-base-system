@@ -1,153 +1,99 @@
 # Knowledge Base System
 
-A full-stack documentation and knowledge management system built with React, Node.js, Express, and PostgreSQL.
+A full-stack documentation and knowledge management system built with the MERN stack (PostgreSQL variant).
 
 ## Features
 
-- User authentication (JWT)
-- Article creation and management
-- Rich text editor
-- Full-text search
-- Categories and tags
-- Version history
-- Role-based access control (Admin, Editor, Reader)
-- Admin panel
+- **Authentication**: Secure JWT-based auth with role-based access control (Reader, Editor, Admin).
+- **Articles**: Create, read, update, and delete articles with a rich text editor.
+- **Search**: Full-text search functionality for articles.
+- **Categorization**: Organize content with categories and tags.
+- **History**: Track article version history.
+- **Admin Panel**: Manage users and content from a centralized dashboard.
 
 ## Tech Stack
 
-**Frontend:**
-- React + Vite
-- React Router
-- Axios
-- React Quill (Rich Text Editor)
-- Tailwind CSS
-- React Hot Toast
+- **Frontend**: React, Vite, TailwindCSS, React Router, React Quill.
+- **Backend**: Node.js, Express, PostgreSQL.
+- **Database**: PostgreSQL with `pg` pool.
 
-**Backend:**
-- Node.js + Express
-- PostgreSQL
-- JWT Authentication
-- bcrypt for password hashing
-
-## Setup Instructions
+## Getting Started
 
 ### Prerequisites
+
 - Node.js (v18+)
-- PostgreSQL (v14+)
+- PostgreSQL installed and running.
 
-### Backend Setup
+### 1. Database Setup
 
-1. Navigate to backend folder:
-```bash
-cd backend
+Create a PostgreSQL database named `knowledge_base` and run the schema script (if provided in `database.sql`):
+
+```sql
+CREATE DATABASE knowledge_base;
 ```
 
-2. Install dependencies:
-```bash
-npm install
-```
+### 2. Backend Setup
 
-3. Create `.env` file:
-```env
-PORT=5000
-DATABASE_URL=postgresql://username:password@localhost:5432/knowledge_base
-JWT_SECRET=your-secret-key-here
-NODE_ENV=development
-```
+1.  Navigate to the backend directory:
+    ```bash
+    cd backend
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+3.  Configure environment variables in `.env`:
+    ```env
+    PORT=5000
+    DATABASE_URL=postgresql://user:password@localhost:5432/knowledge_base
+    JWT_SECRET=your_secure_secret
+    NODE_ENV=development
+    ```
+4.  Start the server:
+    ```bash
+    npm run dev
+    ```
 
-4. Create database and run SQL schema:
-- Open pgAdmin
-- Create database `knowledge_base`
-- Run the SQL from `database.sql`
+### 3. Frontend Setup
 
-5. Start server:
-```bash
-npm run dev
-```
+1.  Navigate to the frontend directory:
+    ```bash
+    cd frontend
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+3.  Start the development server:
+    ```bash
+    npm run dev
+    ```
 
-### Frontend Setup
+The application will be available at `http://localhost:5173`.
 
-1. Navigate to frontend folder:
-```bash
-cd frontend
-```
+## API Documentation
 
-2. Install dependencies:
-```bash
-npm install
-```
+### Auth
 
-3. Start development server:
-```bash
-npm run dev
-```
-
-4. Open browser at `http://localhost:5173`
-
-## Default User Roles
-
-- **Reader**: Can view articles
-- **Editor**: Can create and edit articles
-- **Admin**: Full access including category management
-
-## API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login
-- `GET /api/auth/me` - Get current user
+- `POST /api/auth/register` - Create a new account.
+- `POST /api/auth/login` - Authenticate user and get token.
+- `GET /api/auth/me` - Get current user profile.
 
 ### Articles
-- `GET /api/articles` - Get all articles (with pagination)
-- `GET /api/articles/:id` - Get single article
-- `POST /api/articles` - Create article (Editor/Admin)
-- `PUT /api/articles/:id` - Update article (Editor/Admin)
-- `DELETE /api/articles/:id` - Delete article (Admin)
-- `GET /api/articles/:id/versions` - Get version history
 
-### Categories
-- `GET /api/categories` - Get all categories
-- `POST /api/categories` - Create category (Admin)
+- `GET /api/articles` - List articles (supports pagination).
+- `GET /api/articles/:id` - Get article details.
+- `POST /api/articles` - Create article (Editor+).
+- `PUT /api/articles/:id` - Update article (Editor+).
+- `DELETE /api/articles/:id` - Delete article (Admin).
 
 ### Search
-- `GET /api/search?q=keyword` - Search articles
 
-## Project Structure
-```
-knowledge-base/
-├── backend/
-│   ├── config/
-│   │   └── db.js
-│   ├── middleware/
-│   │   └── auth.js
-│   ├── routes/
-│   │   ├── auth.js
-│   │   ├── articles.js
-│   │   ├── categories.js
-│   │   └── search.js
-│   ├── .env
-│   ├── server.js
-│   └── package.json
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   └── Navbar.jsx
-│   │   ├── pages/
-│   │   │   ├── Login.jsx
-│   │   │   ├── Register.jsx
-│   │   │   ├── ArticleList.jsx
-│   │   │   ├── ArticleView.jsx
-│   │   │   ├── ArticleEditor.jsx
-│   │   │   └── AdminPanel.jsx
-│   │   ├── utils/
-│   │   │   └── api.js
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   └── package.json
-└── README.md
-```
+- `GET /api/search?q=query` - Search articles by title or content.
 
-## Screenshots
+## Deployment
 
-[Add screenshots here after deployment]
+The frontend is configured for deployment on static hosting (like GitHub Pages or Netlify).
+The backend requires a Node.js environment (like Render, Railway, or Heroku).
 
+> **Note**: If deploying frontend and backend separately, ensure `VITE_API_URL` is set in the frontend environment to point to your live backend.

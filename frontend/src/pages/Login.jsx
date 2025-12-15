@@ -33,10 +33,15 @@ export default function Login({ setUser }) {
     };
 
     return (
-        <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4 bg-yellow-50">
+        <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4 bg-yellow-50 relative">
+            <div className="absolute top-8 left-8 hidden md:block">
+                <div className="bg-white border-2 border-black px-6 py-3 rounded-full font-black text-xl uppercase tracking-wider animate-pulse-shadow">
+                    Knowledge Base
+                </div>
+            </div>
+
             <div className="w-full max-w-4xl grid md:grid-cols-2 gap-8 items-center">
                 
-                {/* Left Side: Form */}
                 <div className="bg-white border-2 border-black rounded-xl p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                     <div className="mb-8">
                         <h1 className="text-4xl font-black text-black mb-2 uppercase tracking-tight">

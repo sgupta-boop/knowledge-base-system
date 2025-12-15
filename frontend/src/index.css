@@ -20,6 +20,25 @@
   }
 }
 
+@layer utilities {
+  @keyframes pulse-shadow {
+    0% {
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+  }
+  
+  .animate-pulse-shadow {
+    animation: pulse-shadow 2s infinite;
+  }
+}
+
+
 @layer components {
   /* Glassmorphism utility */
   .glass {
