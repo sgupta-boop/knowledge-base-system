@@ -6,10 +6,6 @@ const { auth: authenticateToken } = require('../middleware/auth');
 // Get admin stats
 router.get('/', authenticateToken, async (req, res) => {
     try {
-        // Only allow admin access (optional, but good practice)
-        // if (req.user.role !== 'admin') return res.status(403).json({ error: 'Access denied' });
-
-        // 1. Total Articles, Views, Active Users
         const globalStatsQuery = `
             SELECT 
                 (SELECT COUNT(*) FROM articles) as total_articles,
@@ -18,7 +14,6 @@ router.get('/', authenticateToken, async (req, res) => {
         `;
         const globalStats = await pool.query(globalStatsQuery);
 
-        // 2. Category Breakdown
         const categoryStatsQuery = `
             SELECT 
                 c.id, 

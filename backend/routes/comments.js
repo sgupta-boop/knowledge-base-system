@@ -26,7 +26,7 @@ router.get('/:articleId', async (req, res) => {
 router.post('/:articleId', auth, async (req, res) => {
     try {
         const { articleId } = req.params;
-        const { body } = req.body; // Frontend sends 'body' in JSON
+        const { body } = req.body;
         
         console.log(`📝 Posting comment for article ${articleId} by user ${req.user.id}`);
 

@@ -23,7 +23,6 @@ export default function Navbar({ user, setUser }) {
                             Knowledge Base
                         </Link>
                         
-                        {/* Search Bar - Visible on desktop */}
                         <div className="hidden md:block w-full max-w-xs">
                             <SearchAutocomplete />
                         </div>
