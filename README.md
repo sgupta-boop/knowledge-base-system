@@ -71,6 +71,10 @@ CREATE DATABASE knowledge_base;
 
 The application will be available at `http://localhost:5173`.
 
+##Screenshots
+###Registeration page
+<img width="1918" height="909" alt="image" src="https://github.com/user-attachments/assets/771bdd50-27f7-434b-a60e-e35771e9e3d6" />
+
 ## API Documentation
 
 ### Auth
