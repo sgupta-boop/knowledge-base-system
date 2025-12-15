@@ -99,4 +99,4 @@ https://github.com/user-attachments/assets/d1b45a92-364e-4b37-a1dd-f9cce88ab5f4
 The frontend is configured for deployment on static hosting.
 The backend requires a Node.js environment (like Render, Railway, or Heroku).
 
-> **Note**: If deploying frontend and backend separately, ensure `VITE_API_URL` is set in the frontend environment to point to your live backend.
+
