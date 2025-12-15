@@ -39,3 +39,4 @@ dist/
 build/
 *.log
 .DS_Store
+.env.production
